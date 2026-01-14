@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="LuxRemix: Lighting Decomposition and Remixing for Indoor Scenes">
+  <meta name="keywords" content="LuxRemix, Lighting Decomposition, Relighting, Indoor Scenes, 3D Gaussian Splatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LuxRemix: Lighting Decomposition and Remixing for Indoor Scenes</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "lil-gui": "https://unpkg.com/lil-gui@0.19.1/dist/lil-gui.esm.min.js",
+                "js-yaml": "https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.mjs"
+            }
+        }
+    </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans', sans-serif;
+    }
+    .title.is-1 {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+    }
+    .publication-title {
+        font-family: 'Google Sans', sans-serif;
+    }
+    .publication-authors {
+        font-family: 'Google Sans', sans-serif;
+        font-size: 1.2rem;
+    }
+    .publication-venue {
+        font-family: 'Google Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    .publication-links {
+        margin-top: 10px;
+    }
+    .publication-links .link-block {
+        margin-right: 10px;
+        display: inline-block;
+    }
+    .hero-body {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    .teaser .hero-body {
+        padding-top: 0;
+        padding-bottom: 3rem;
+    }
+    .results-carousel {
+        overflow: hidden;
+    }
+    .results-carousel .item {
+        margin: 5px;
+        overflow: hidden;
+        border: 1px solid #dbdbdb;
+        border-radius: 10px;
+    }
+    .content h2 {
+        font-family: 'Google Sans', sans-serif;
+        margin-bottom: 1rem;
+    }
+    .bibtex-section {
+        background-color: #f5f5f5;
+        padding: 1.5rem;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+    pre {
+        background-color: transparent;
+        padding: 0;
+    }
+    footer {
+        padding: 3rem 0;
+        background-color: #f5f5f5;
+        margin-top: 3rem;
+    }
+
+    .interpolation-panel {
+        background: #f5f5f5;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Demo Styles */
+    #demo-app-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        min-height: 600px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 1px solid #dbdbdb;
+    }
+
+    #demo-scene-bar {
+        width: 100%;
+        height: 100px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #dbdbdb;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        align-items: center;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .demo-scene-thumbnail {
+        height: 80px;
+        width: 80px;
+        min-width: 80px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .demo-scene-thumbnail:hover {
+        transform: scale(1.05);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .demo-scene-thumbnail.selected {
+        border-color: #3273dc;
+        box-shadow: 0 0 0 2px rgba(50, 115, 220, 0.3);
+    }
+
+    .demo-scene-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .demo-scene-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        font-size: 10px;
+        padding: 2px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #demo-sidebar {
+        width: 100%;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        z-index: 10;
+        border-top: 1px solid #dbdbdb;
+        order: 2; /* Move to bottom */
+        height: 320px; /* Fixed height for bottom panel */
+    }
+
+    .demo-sidebar-header {
+        padding: 10px 16px;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #dbdbdb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .demo-sidebar-header h2 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #363636;
+    }
+
+    #demo-gui-container {
+        flex: 1;
+        position: relative;
+        overflow-y: hidden; /* Hide vertical scroll on container */
+        overflow-x: auto; /* Allow horizontal scroll if needed */
+        display: flex;
+        flex-direction: row; /* Horizontal layout */
+        align-items: flex-start;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    /* lil-gui customization for light theme & horizontal layout */
+    .lil-gui {
+        --background-color: #ffffff;
+        --text-color: #363636;
+        --title-background-color: #f5f5f5;
+        --widget-color: #f0f0f0;
+        --hover-color: #e5e5e5;
+        --focus-color: #e0e0e0;
+        --number-color: #3273dc;
+        --string-color: #00947e;
+        width: 300px; /* Fixed width per column */
+        min-width: 250px;
+        --font-size: 13px;
+        height: 100%;
+        overflow-y: auto;
+        border: 1px solid #dbdbdb;
+        border-radius: 4px;
+        margin-bottom: 0 !important;
+    }
+
+    /* Ensure lil-gui root behaves nicely in horizontal flex */
+    .lil-gui.root {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: auto !important;
+        gap: 10px;
+        background: transparent;
+    }
+
+    /* Individual folders become columns */
+    .lil-gui.root > .children > .folder {
+        width: 280px;
+        min-width: 280px;
+        border: 1px solid #dbdbdb;
+        border-radius: 4px;
+        background: #fff;
+        height: 100%;
+        max-height: 250px; /* Limit height of columns */
+        overflow-y: auto;
+    }
+
+    /* Hide root title/wrapper if interfering */
+    .lil-gui.root > .title {
+        display: none;
+    }
+
+    /* Fix children container in root to flow horizontally */
+    .lil-gui.root > .children {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        height: 100%;
+    }
+
+    .lil-gui .title {
+        color: #363636;
+        font-weight: 600;
+        border-bottom: 1px solid #eee;
+        font-size: 15px; /* Smaller title font */
+        line-height: 20px;
+        height: 20px;
+        padding-left: 4px;
+    }
+
+    .lil-gui .controller {
+        padding-top: 2px;
+        padding-bottom: 2px;
+        height: auto;
+    }
+
+    .lil-gui .name {
+        font-size: 13px !important; /* Smaller label font */
+        line-height: 16px;
+        padding-right: 5px;
+        min-height: 16px;
+    }
+
+    .lil-gui .widget {
+        font-size: 13px !important;
+        height: 20px;
+        line-height: 20px;
+    }
+
+    .lil-gui input[type="text"], .lil-gui input[type="number"], .lil-gui select {
+        font-size: 13px !important;
+        height: 18px;
+        margin-top: 1px;
+    }
+
+    .lil-gui button {
+        font-size: 13px !important;
+        height: 20px;
+        line-height: 18px;
+    }
+
+    #demo-main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        position: relative;
+        background-color: #f5f5f5;
+        min-height: 400px;
+        order: 1; /* Move to top */
+    }
+
+    #demo-viewer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        max-width: 1400px; /* Limit max width for viewer */
+        margin: 0 auto;
+    }
+
+    @media (max-width: 1024px) {
+        #demo-viewer-grid {
+             grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #demo-app-container {
+            height: auto;
+        }
+
+        #demo-sidebar {
+            height: auto;
+            max-height: 400px;
+        }
+
+        #demo-gui-container {
+            flex-direction: column; /* Revert to vertical on mobile */
+            overflow-y: auto;
+        }
+
+        .lil-gui.root > .children {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .lil-gui.root > .children > .folder {
+            width: 100%;
+            max-height: none;
+        }
+
+        #demo-viewer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .demo-view-panel {
+        display: flex;
+        flex-direction: column;
+        background-color: #ffffff;
+        border: 1px solid #dbdbdb;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .demo-panel-header {
+        padding: 8px 12px;
+        background-color: #f5f5f5;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #dbdbdb;
+        color: #363636;
+        text-align: center;
+    }
+
+    .demo-image-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        position: relative;
+        background-color: #e0e0e0; /* Neutral gray for image placeholder */
+        overflow: hidden;
+        background-image:
+            linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(-45deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(-45deg, transparent 75%, #ccc 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    #demo-input-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    #demo-canvas-container canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #demo-loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255,255,255,0.9);
+        color: #363636;
+        padding: 15px 30px;
+        border-radius: 6px;
+        z-index: 1000;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .mask-overlay-btn {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background: rgba(50, 115, 220, 0.8);
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .mask-overlay-btn:hover {
+        background: rgba(50, 115, 220, 1.0);
+        transform: translate(-50%, -50%) scale(1.1);
+        z-index: 11;
+    }
+    .mask-overlay-btn.inactive {
+        background: rgba(100, 100, 100, 0.6);
+        border-color: #ccc;
+    }
+    .mask-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Match container aspect */
+        mix-blend-mode: screen;
+        pointer-events: none;
+        opacity: 1.0;
+        filter: brightness(2.0) contrast(2.0); /* Boost white just in case */
+    }
+
+    #demo-mask-container {
+        background: black;
+    }
+  </style>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">LuxRemix: Lighting Decomposition and Remixing for Indoor Scenes</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://nexuslrf.github.io/">Ruofan Liang</a><sup>1,2,3</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.normanm.de/">Norman Müller</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://ethanweber.me/">Ethan Weber</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/duncan-zauss/">Duncan Zauss</a><sup>1</sup>,</span>
+            <br>
+            <span class="author-block">
+              <a href="https://www.cs.toronto.edu/~nandita/">Nandita Vijaykumar</a><sup>2,3,*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=CxbDDRMAAAAJ">Peter Kontschieder</a><sup>1,*</sup>,</span>
+            <span class="author-block">
+              <a href="https://richardt.name/">Christian Richardt</a><sup>1,*</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Meta Reality Labs,</span>
+            <span class="author-block"><sup>2</sup>University of Toronto</span>
+            <span class="author-block"><sup>3</sup>Vector Institute</span>
+            <br>
+            <span class="author-block"><small>* Joint advising</small></span>
+          </div>
+
+          <div class="is-size-5 publication-venue">
+            <span class="author-block">preprint</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- BibTeX Link. -->
+              <span class="link-block">
+                <a href="#BibTeX"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-alt"></i>
+                  </span>
+                  <span>BibTeX</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <!-- <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span> -->
+              <!-- Data Link. -->
+              <!-- <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+                </span> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <style>
+      @keyframes blink-blue {
+        0%, 100% { color: #000000; opacity: 1; }
+        50% { color: #2980b9; opacity: 1; }
+      }
+      .blinking-blue {
+        animation: blink-blue 2s infinite;
+      }
+    </style>
+    <p class="content has-text-centered blinking-blue"><i>Hover over the images to see the animations.</i></p>
+    <div class="hero-body">
+      <div style="display: flex; width: 100%; gap: 5px;">
+        <div style="flex: 0.779; display: flex; flex-direction: column; gap: 5px;">
+          <img src="./static/images/teaser_01.png"
+               onmouseover="this.src='./static/images/teaser_01.gif'"
+               onmouseout="this.src='./static/images/teaser_01.png'"
+               alt="LuxRemix Teaser 1" style="width: 100%;">
+          <img src="./static/images/teaser_03.png"
+               onmouseover="this.src='./static/images/teaser_03.gif'"
+               onmouseout="this.src='./static/images/teaser_03.png'"
+               alt="LuxRemix Teaser 3" style="width: 100%;">
+        </div>
+        <div style="flex: 1.0; display: flex; flex-direction: column; gap: 5px;">
+          <img src="./static/images/teaser_02.png"
+               onmouseover="this.src='./static/images/teaser_02.gif'"
+               onmouseout="this.src='./static/images/teaser_02.png'"
+               alt="LuxRemix Teaser 2" style="width: 100%;">
+          <img src="./static/images/teaser_04.png"
+               onmouseover="this.src='./static/images/teaser_04.gif'"
+               onmouseout="this.src='./static/images/teaser_04.png'"
+               alt="LuxRemix Teaser 4" style="width: 100%;">
+        </div>
+      </div>
+      <p class="content has-text-justified is-size-6">
+        <span class="dnerf">LuxRemix</span> enables interactive light editing of indoor scenes.
+        Our method decomposes complex scene lighting into one-light-at-a-time (OLAT) sources and ambient lighting, which can be remixed for relighting effects.
+        In the top right, we apply our method to single images, where we can change lights and their colors.
+        <span class="dnerf">LuxRemix</span> also enables multi-view-consistent harmonization of the decomposed lighting across multi-view images.
+        By combining these capabilities, we enable real-time relighting of indoor scenes using 3D Gaussian splatting.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified is-size-5.5">
+          <p>
+            We present a novel approach for interactive light editing in indoor scenes from a single multi-view scene capture.
+            Our method leverages a generative image-based light decomposition model that factorizes complex indoor scene illumination into its constituent light sources.
+            This factorization enables independent manipulation of individual light sources, specifically allowing control over their state (on/off), chromaticity, and intensity.
+            We further introduce multi-view lighting harmonization to ensure consistent propagation of the lighting decomposition across all scene views.
+            This is integrated into a relightable 3D Gaussian splatting representation, providing real-time interactive control over the individual light sources.
+            Our results demonstrate highly photorealistic lighting decomposition and relighting outcomes across diverse indoor scenes.
+            We evaluate our method on both synthetic and real-world datasets and provide a quantitative and qualitative comparison to state-of-the-art techniques.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method Overview</h2>
+        <div class="content has-text-justified is-size-6">
+            <img src="./static/images/pipeline.png" alt="LuxRemix Pipeline" style="width: 100%;">
+          <p>
+            Given a multi-view capture of an indoor scene, we apply our single-image lighting decomposition model to generate one-light-at-a-time (OLAT) decompositions.
+            We propagate these decompositions across all views using multi-view lighting harmonization with geometric constraints.
+            Repeating this for each light source yields a complete multi-view OLAT dataset.
+            We train a relightable 3D Gaussian splatting representation on these decompositions, enabling real-time interactive control over each light from any viewpoint.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Single-Image Lighting Decomposition</h2>
+      <div class="columns is-centered">
+        <div class="column is-three-fifths">
+          <div class="content has-text-centered is-size-6">
+            <video id="single-image-video" autoplay controls muted loop playsinline style="max-width: 75%;">
+              <source src="./static/videos/single-image-light-remixing_web.mp4" type="video/mp4">
+            </video>
+            <p>
+              Our method decomposes complex scene lighting into individually controllable light sources from a single image.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Multi-View Lighting Harmonization</h2>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content has-text-centered is-size-6">
+            <video id="multi-view-video" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/multi-view-lighting-harmonization.mp4" type="video/mp4">
+            </video>
+            <p>
+              We consistently propagate lighting decompositions across all scene views using multi-view lighting harmonization.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered">Real-time Remixable Lighting</h2>
+        <div class="columns is-centered">
+            <div class="column is-four-fifths">
+                <div id="results-carousel" class="carousel results-carousel">
+                    <div class="item">
+                        <video poster="" id="3dgs-0" autoplay controls muted loop playsinline height="100%">
+                            <source src="./static/videos/3dgs-relighting-00.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item">
+                        <video poster="" id="3dgs-1" autoplay controls muted loop playsinline height="100%">
+                            <source src="./static/videos/3dgs-relighting-01.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item">
+                        <video poster="" id="3dgs-2" autoplay controls muted loop playsinline height="100%">
+                            <source src="./static/videos/3dgs-relighting-02.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="item">
+                        <video poster="" id="3dgs-3" autoplay controls muted loop playsinline height="100%">
+                            <source src="./static/videos/3dgs-relighting-03.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                <div class="content has-text-centered is-size-5" style="margin-top: 1rem;">
+                    <p>
+                        Our relightable 3D Gaussian splatting representation enables real-time interactive manipulation of individual light sources.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Interactive Lighting Blend Explorer</h2>
+    <div class="content has-text-justified">
+      <p>
+        Use the controls below to interactively remix the lighting of various scenes. You can adjust the intensity and color of individual light sources, change the ambient light, and download your result.
+      </p>
+    </div>
+
+    <div id="demo-app-container">
+        <div id="demo-scene-bar">
+            <!-- Thumbnails will be injected here -->
+        </div>
+        <div id="demo-sidebar">
+            <div class="demo-sidebar-header">
+                <h2>Fine-grained Control Panel</h2>
+            </div>
+            <div id="demo-gui-container"></div>
+        </div>
+        <div id="demo-main-content">
+            <div id="demo-viewer-grid">
+                <div class="demo-view-panel">
+                    <div class="demo-panel-header">Input</div>
+                    <div class="demo-image-container">
+                        <img id="demo-input-image" src="" alt="Input" />
+                    </div>
+                </div>
+                <div class="demo-view-panel">
+                    <div class="demo-panel-header">Relighted Blend</div>
+                    <div id="demo-canvas-container" class="demo-image-container"></div>
+                </div>
+                <div class="demo-view-panel">
+                    <div class="demo-panel-header">Masks</div>
+                    <div id="demo-mask-container" class="demo-image-container"></div>
+                </div>
+            </div>
+            <div id="demo-loading">Loading assets...</div>
+            <!-- <script type="module">
+              async function loadModuleWithBlob(path) {
+                  const response = await fetch(path);
+                  if (!response.ok) {
+                      throw new Error(`Failed to fetch ${path}: ${response.status} ${response.statusText}`);
+                  }
+
+                  const code = await response.text();
+                  const blob = new Blob([code], { type: 'text/javascript' });
+                  const moduleUrl = URL.createObjectURL(blob);
+
+                  try {
+                      await import(moduleUrl);
+                  } finally {
+                      URL.revokeObjectURL(moduleUrl);
+                  }
+              }
+
+              loadModuleWithBlob('./static/demo/js/app.js').catch(error => {
+                  const loadingEl = document.getElementById('loading');
+                  if (loadingEl) {
+                      loadingEl.textContent = 'Failed to initialize application.';
+                  }
+                  console.error('Failed to bootstrap app.js', error);
+              });
+            </script> -->
+        </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <div class="bibtex-section">
+<pre><code>@article{liang2026luxremix,
+  title={LuxRemix: Lighting Decomposition and Remixing for Indoor Scenes},
+  author={Liang, Ruofan and M{\"u}ller, Norman and Weber, Ethan and Zauss, Duncan and Vijaykumar, Nandita and Kontschieder, Peter and Richardt, Christian},
+  journal={preprint},
+  year={2026}
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var carousel = bulmaCarousel.attach('#results-carousel', {
+            slidesToScroll: 1,
+            slidesToShow: 1,
+            loop: true,
+            infinite: true,
+            autoplay: true,
+            autoplaySpeed: 45000,
+            pagination: true,
+            navigation: true,
+            navigationKeys: true,
+            icons: {
+                previous: '<span class="icon is-large"><i class="fas fa-chevron-left"></i></span>',
+                next: '<span class="icon is-large"><i class="fas fa-chevron-right"></i></span>'
+            }
+        });
+    });
+</script>
+<script type="module" src="./static/demo/js/app.js"></script>
+
+</body>
+</html>

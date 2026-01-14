@@ -1,0 +1,179 @@
+scenes:
+  bar:
+    input: examples/bar/input.png
+    ours:
+      bg: examples/bar/ours/bg.png
+      olat:
+      - examples/bar/ours/olat_m00.exr
+      - examples/bar/ours/olat_m01.exr
+      mask:
+      - examples/bar/mask/mask_0.png
+      - examples/bar/mask/mask_1.png
+  bhshantanu:
+    input: examples/bhshantanu/input.jpg
+    ours:
+      bg: examples/bhshantanu/ours/bg.jpg
+      olat:
+      - examples/bhshantanu/ours/olat_m00.exr
+      mask:
+      - examples/bhshantanu/mask/mask_0.png
+  s_2_45:
+    input: examples/s_2_45/input.jpg
+    ours:
+      bg: examples/s_2_45/ours/bg.jpg
+      olat:
+      - examples/s_2_45/ours/olat_m00.exr
+      - examples/s_2_45/ours/olat_m01.exr
+      mask:
+      - examples/s_2_45/mask/mask_0.png
+      - examples/s_2_45/mask/mask_1.png
+  dog_f000007:
+    input: examples/dog_f000007/input.png
+    ours:
+      bg: examples/dog_f000007/ours/bg.png
+      olat:
+      - examples/dog_f000007/ours/olat_m00.exr
+      mask:
+      - examples/dog_f000007/mask/mask_0.png
+  eth:
+    input: examples/eth/input.jpg
+    ours:
+      bg: examples/eth/ours/bg.png
+      olat:
+      - examples/eth/ours/olat_m00.exr
+      - examples/eth/ours/olat_m01.exr
+      - examples/eth/ours/olat_m02.exr
+      - examples/eth/ours/olat_m03.exr
+      - examples/eth/ours/olat_m04.exr
+      - examples/eth/ours/olat_m05.exr
+      - examples/eth/ours/olat_m06.exr
+      mask:
+      - examples/eth/mask/mask_0.png
+      - examples/eth/mask/mask_1.png
+      - examples/eth/mask/mask_2.png
+      - examples/eth/mask/mask_3.png
+      - examples/eth/mask/mask_4.png
+      - examples/eth/mask/mask_5.png
+      - examples/eth/mask/mask_6.png
+  becca-tapert-p6h5U:
+    input: examples/becca-tapert-p6h5U/input.jpg
+    ours:
+      bg: examples/becca-tapert-p6h5U/ours/bg.jpg
+      olat:
+      - examples/becca-tapert-p6h5U/ours/olat_m00.exr
+      mask:
+      - examples/becca-tapert-p6h5U/mask/mask_0.png
+  burst-545034:
+    input: examples/burst-545034/input.jpg
+    ours:
+      bg: examples/burst-545034/ours/bg.jpg
+      olat:
+      - examples/burst-545034/ours/olat_m00.exr
+      mask:
+      - examples/burst-545034/mask/mask_0.png
+  daan-stevens-66128-939331:
+    input: examples/daan-stevens-66128-939331/input.jpg
+    ours:
+      bg: examples/daan-stevens-66128-939331/ours/bg.jpg
+      olat:
+      - examples/daan-stevens-66128-939331/ours/olat_m00.exr
+      mask:
+      - examples/daan-stevens-66128-939331/mask/mask_0.png
+  introspectivedsgn-27703394:
+    input: examples/introspectivedsgn-27703394/input.jpg
+    ours:
+      bg: examples/introspectivedsgn-27703394/ours/bg.png
+      olat:
+      - examples/introspectivedsgn-27703394/ours/olat_m00.exr
+      - examples/introspectivedsgn-27703394/ours/olat_m01.exr
+      - examples/introspectivedsgn-27703394/ours/olat_m02.exr
+      mask:
+      - examples/introspectivedsgn-27703394/mask/mask_0.png
+      - examples/introspectivedsgn-27703394/mask/mask_1.png
+      - examples/introspectivedsgn-27703394/mask/mask_2.png
+  jean-philippe-delberghe:
+    input: examples/jean-philippe-delberghe/input.jpg
+    ours:
+      bg: examples/jean-philippe-delberghe/ours/bg.png
+      olat:
+      - examples/jean-philippe-delberghe/ours/olat_m00.exr
+      mask:
+      - examples/jean-philippe-delberghe/mask/mask_0.png
+  juanpphotoandvideo-967016:
+    input: examples/juanpphotoandvideo-967016/input.jpg
+    ours:
+      bg: examples/juanpphotoandvideo-967016/ours/bg.png
+      olat:
+      - examples/juanpphotoandvideo-967016/ours/olat_m00.exr
+      - examples/juanpphotoandvideo-967016/ours/olat_m01.exr
+      mask:
+      - examples/juanpphotoandvideo-967016/mask/mask_0.png
+      - examples/juanpphotoandvideo-967016/mask/mask_1.png
+  karen-medina-304879132-13436425:
+    input: examples/karen-medina-304879132-13436425/input.jpg
+    ours:
+      bg: examples/karen-medina-304879132-13436425/ours/bg.jpg
+      olat:
+      - examples/karen-medina-304879132-13436425/ours/olat_m00.exr
+      mask:
+      - examples/karen-medina-304879132-13436425/mask/mask_0.png
+  marina-podrez-3269296-11673566:
+    input: examples/marina-podrez-3269296-11673566/input.jpg
+    ours:
+      bg: examples/marina-podrez-3269296-11673566/ours/bg.jpg
+      olat:
+      - examples/marina-podrez-3269296-11673566/ours/olat_m00.exr
+      mask:
+      - examples/marina-podrez-3269296-11673566/mask/mask_0.png
+  medhat-ayad-122846-383838:
+    input: examples/medhat-ayad-122846-383838/input.jpg
+    ours:
+      bg: examples/medhat-ayad-122846-383838/ours/bg.jpg
+      olat:
+      - examples/medhat-ayad-122846-383838/ours/olat_m00.exr
+      - examples/medhat-ayad-122846-383838/ours/olat_m01.exr
+      - examples/medhat-ayad-122846-383838/ours/olat_m02.exr
+      - examples/medhat-ayad-122846-383838/ours/olat_m03.exr
+      - examples/medhat-ayad-122846-383838/ours/olat_m04.exr
+      mask:
+      - examples/medhat-ayad-122846-383838/mask/mask_0.png
+      - examples/medhat-ayad-122846-383838/mask/mask_1.png
+      - examples/medhat-ayad-122846-383838/mask/mask_2.png
+      - examples/medhat-ayad-122846-383838/mask/mask_3.png
+      - examples/medhat-ayad-122846-383838/mask/mask_4.png
+  pixabay-265129:
+    input: examples/pixabay-265129/input.jpg
+    ours:
+      bg: examples/pixabay-265129/ours/bg.jpg
+      olat:
+      - examples/pixabay-265129/ours/olat_m00.exr
+      mask:
+      - examples/pixabay-265129/mask/mask_0.png
+  polina-kovaleva-5546811:
+    input: examples/polina-kovaleva-5546811/input.jpg
+    ours:
+      bg: examples/polina-kovaleva-5546811/ours/bg.jpg
+      olat:
+      - examples/polina-kovaleva-5546811/ours/olat_m00.exr
+      mask:
+      - examples/polina-kovaleva-5546811/mask/mask_0.png
+  z1_christian-mackie-cc0Gg3BegjE-unsplash:
+    input: examples/z1_christian-mackie-cc0Gg3BegjE-unsplash/input.jpg
+    ours:
+      bg: examples/z1_christian-mackie-cc0Gg3BegjE-unsplash/ours/bg.jpg
+      olat:
+      - examples/z1_christian-mackie-cc0Gg3BegjE-unsplash/ours/olat_m00.exr
+      - examples/z1_christian-mackie-cc0Gg3BegjE-unsplash/ours/olat_m01.exr
+      mask:
+      - examples/z1_christian-mackie-cc0Gg3BegjE-unsplash/mask/mask_0.png
+      - examples/z1_christian-mackie-cc0Gg3BegjE-unsplash/mask/mask_1.png
+  z_mminschlxxx-31827772:
+    input: examples/z_mminschlxxx-31827772/input.jpg
+    ours:
+      bg: examples/z_mminschlxxx-31827772/ours/bg.jpg
+      olat:
+      - examples/z_mminschlxxx-31827772/ours/olat_m00.exr
+      - examples/z_mminschlxxx-31827772/ours/olat_m01.exr
+      mask:
+      - examples/z_mminschlxxx-31827772/mask/mask_0.png
+      - examples/z_mminschlxxx-31827772/mask/mask_1.png
