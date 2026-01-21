@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="bulbGradient" cx="50%" cy="40%">
+      <stop offset="0%" style="stop-color:#FFF9C4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFD54F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA726;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="baseGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#757575;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#424242;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Continuous hue circle background using multiple thin segments -->
+  <g opacity="0.85">
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(0, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="0"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(10, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-7.85"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(20, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-15.7"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(30, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-23.55"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(40, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-31.4"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(50, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-39.25"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(60, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-47.1"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(70, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-54.95"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(80, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-62.8"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(90, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-70.65"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(100, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-78.5"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(110, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-86.35"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(120, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-94.2"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(130, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-102.05"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(140, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-109.9"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(150, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-117.75"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(160, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-125.6"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(170, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-133.45"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(180, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-141.3"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(190, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-149.15"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(200, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-157"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(210, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-164.85"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(220, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-172.7"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(230, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-180.55"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(240, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-188.4"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(250, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-196.25"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(260, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-204.1"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(270, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-211.95"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(280, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-219.8"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(290, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-227.65"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(300, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-235.5"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(310, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-243.35"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(320, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-251.2"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(330, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-259.05"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(340, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-266.9"/>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(350, 100%, 50%)" stroke-width="10" stroke-dasharray="7.85 274.15" stroke-dashoffset="-274.75"/>
+  </g>
+  
+  <!-- Light rays emanating from bulb -->
+  <g opacity="0.6" stroke="#F57C00" stroke-width="3" stroke-linecap="round">
+    <line x1="50" y1="22" x2="50" y2="8"/>
+    <line x1="18" y1="32" x2="10" y2="22"/>
+    <line x1="82" y1="32" x2="90" y2="22"/>
+    <line x1="8" y1="50" x2="0" y2="50"/>
+    <line x1="92" y1="50" x2="100" y2="50"/>
+  </g>
+  
+  <!-- Main bulb glass with outline - centered at 50,50 -->
+  <ellipse cx="50" cy="50" rx="25" ry="30" fill="url(#bulbGradient)" filter="url(#glow)"/>
+  <ellipse cx="50" cy="50" rx="25" ry="30" fill="none" stroke="#E65100" stroke-width="3"/>
+  
+  <!-- Bulb highlight for glass effect -->
+  <ellipse cx="43" cy="40" rx="9" ry="12" fill="white" opacity="0.6"/>
+  
+  <!-- Connection between bulb and base -->
+  <path d="M 37 78 L 37 76 Q 37 74 39 74 L 61 74 Q 63 74 63 76 L 63 78" fill="#616161"/>
+  
+  <!-- Bulb screw base (metal threads) with darker colors -->
+  <rect x="37" y="78" width="26" height="4" fill="#616161" rx="1"/>
+  <rect x="37" y="83" width="26" height="3" fill="#424242" rx="1"/>
+  <rect x="37" y="87" width="26" height="3" fill="#616161" rx="1"/>
+  <rect x="37" y="91" width="26" height="3" fill="#424242" rx="1"/>
+  
+  <!-- Bottom contact -->
+  <rect x="40" y="95" width="20" height="4" fill="url(#baseGradient)" rx="1"/>
+  <rect x="40" y="95" width="20" height="4" fill="none" stroke="#212121" stroke-width="1.5" rx="1"/>
+  
+  <!-- Filament inside bulb -->
+  <g>
+    <path d="M 50 42 Q 44 48 50 54 T 50 68" stroke="#BF360C" stroke-width="2.5" fill="none"/>
+    <line x1="50" y1="68" x2="50" y2="74" stroke="#757575" stroke-width="2.5"/>
+  </g>
+</svg>
