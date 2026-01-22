@@ -12,6 +12,7 @@ const state = {
     exposure: 0.0, // EV
     toneMapping: 'Reinhard',
     backgroundScale: 0.5,
+    ambientBgEnabled: true,
     olats: [],
     batch: {
         colorEnabled: false,
@@ -335,6 +336,8 @@ function updateSceneBar(scenes) {
         const inputPath = resolvePath(sceneData.input);
         img.src = inputPath;
         img.alt = sceneName;
+        img.loading = 'lazy'; // Native lazy loading for thumbnails
+        img.decoding = 'async'; // Non-blocking decode
 
         const label = document.createElement('div');
         label.className = 'demo-scene-label';
@@ -524,6 +527,30 @@ async function loadScene(sceneName) {
                     maskContainer.appendChild(btn);
                 }
             });
+
+            // Add ambient bg button at bottom right
+            const bgBtn = document.createElement('div');
+            bgBtn.className = 'mask-overlay-btn';
+            bgBtn.style.left = '95%';
+            bgBtn.style.top = '95%';
+            bgBtn.style.background = 'rgba(255, 140, 0, 0.8)'; // Orange color to differentiate
+            bgBtn.textContent = 'bg';
+            bgBtn.onclick = (e) => {
+                e.stopPropagation();
+                state.ambientBgEnabled = !state.ambientBgEnabled;
+                updateShaderUniforms();
+                // Update GUI checkbox if it exists
+                const olatFolder = gui.children.find(c => c._title === 'OLATs');
+                if (olatFolder) {
+                    const ambientCtrl = olatFolder.controllers.find(c => c._name === 'Ambient Enabled');
+                    if (ambientCtrl) {
+                        ambientCtrl.setValue(state.ambientBgEnabled);
+                    }
+                }
+            };
+            // Set initial state
+            state.ambientBgBtn = bgBtn;
+            maskContainer.appendChild(bgBtn);
         }
 
         updateOLATGUI();
@@ -586,6 +613,19 @@ function updateOLATGUI() {
     if (folder) folder.destroy();
 
     folder = gui.addFolder('OLATs');
+
+    folder.add(state, 'ambientBgEnabled').name('Ambient Enabled').onChange((v) => {
+        updateShaderUniforms();
+        // Update mask button style
+        if (state.ambientBgBtn) {
+            if (v) {
+                state.ambientBgBtn.classList.remove('inactive');
+                state.ambientBgBtn.style.background = 'rgba(255, 140, 0, 0.8)';
+            } else {
+                state.ambientBgBtn.classList.add('inactive');
+            }
+        }
+    }).listen();
 
     folder.add(state, 'backgroundScale', 0, 3).name('Ambient light').onChange(updateShaderUniforms);
 
@@ -684,10 +724,20 @@ function updateShaderUniforms() {
     const m = mesh.material;
 
     m.uniforms.backgroundTexture.value = state.textures ? state.textures.background : null;
-    m.uniforms.backgroundScale.value = state.backgroundScale;
+    m.uniforms.backgroundScale.value = state.ambientBgEnabled ? state.backgroundScale : 0.0;
 
     const modeIdx = TM_MODES.indexOf(state.toneMapping);
     m.uniforms.toneMappingMode.value = modeIdx;
+
+    // Update bg button style
+    if (state.ambientBgBtn) {
+        if (state.ambientBgEnabled) {
+            state.ambientBgBtn.classList.remove('inactive');
+            state.ambientBgBtn.style.background = 'rgba(255, 140, 0, 0.8)';
+        } else {
+            state.ambientBgBtn.classList.add('inactive');
+        }
+    }
 
     for (let i = 0; i < MAX_OLATS; i++) {
         if (i < state.olats.length) {

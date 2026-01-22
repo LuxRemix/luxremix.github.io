@@ -8,6 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LuxRemix: Lighting Decomposition and Remixing for Indoor Scenes</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Resource hints for performance optimization -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -625,15 +633,19 @@
         <div style="display: flex; width: 100%; gap: 5px;">
           <div style="flex: 0.779; display: flex; flex-direction: column; gap: 5px;">
             <img src="./static/images/teaser_01.png" onmouseover="this.src='./static/images/teaser_01.gif'"
-              onmouseout="this.src='./static/images/teaser_01.png'" alt="LuxRemix Teaser 1" style="width: 100%;">
+              onmouseout="this.src='./static/images/teaser_01.png'" alt="LuxRemix Teaser 1" style="width: 100%;"
+              loading="lazy" decoding="async">
             <img src="./static/images/teaser_03.png" onmouseover="this.src='./static/images/teaser_03.gif'"
-              onmouseout="this.src='./static/images/teaser_03.png'" alt="LuxRemix Teaser 3" style="width: 100%;">
+              onmouseout="this.src='./static/images/teaser_03.png'" alt="LuxRemix Teaser 3" style="width: 100%;"
+              loading="lazy" decoding="async">
           </div>
           <div style="flex: 1.0; display: flex; flex-direction: column; gap: 5px;">
             <img src="./static/images/teaser_02.png" onmouseover="this.src='./static/images/teaser_02.gif'"
-              onmouseout="this.src='./static/images/teaser_02.png'" alt="LuxRemix Teaser 2" style="width: 100%;">
+              onmouseout="this.src='./static/images/teaser_02.png'" alt="LuxRemix Teaser 2" style="width: 100%;"
+              loading="lazy" decoding="async">
             <img src="./static/images/teaser_04.png" onmouseover="this.src='./static/images/teaser_04.gif'"
-              onmouseout="this.src='./static/images/teaser_04.png'" alt="LuxRemix Teaser 4" style="width: 100%;">
+              onmouseout="this.src='./static/images/teaser_04.png'" alt="LuxRemix Teaser 4" style="width: 100%;"
+              loading="lazy" decoding="async">
           </div>
         </div>
         <p class="content has-text-justified is-size-6">
@@ -686,7 +698,8 @@
         <div class="column is-four-fifths">
           <h2 class="title is-3">Method Overview</h2>
           <div class="content has-text-justified is-size-6">
-            <img src="./static/images/pipeline.png" alt="LuxRemix Pipeline" style="width: 100%;">
+            <img src="./static/images/pipeline.png" alt="LuxRemix Pipeline" style="width: 100%;" loading="lazy"
+              decoding="async">
             <p>
               Given a multi-view capture of an indoor scene, we apply our single-image lighting decomposition model to
               generate one-light-at-a-time (OLAT) decompositions.
@@ -708,7 +721,8 @@
       <div class="columns is-centered">
         <div class="column is-three-fifths">
           <div class="content has-text-centered is-size-6">
-            <video id="single-image-video" autoplay controls muted loop playsinline style="max-width: 75%;">
+            <video id="single-image-video" autoplay controls muted loop playsinline preload="metadata"
+              style="max-width: 75%;" loading="lazy">
               <source src="./static/videos/single-image-light-remixing_web.mp4" type="video/mp4">
             </video>
             <p>
@@ -728,7 +742,8 @@
       <div class="columns is-centered">
         <div class="column is-four-fifths">
           <div class="content has-text-centered is-size-6">
-            <video id="multi-view-video" autoplay controls muted loop playsinline height="100%">
+            <video id="multi-view-video" autoplay controls muted loop playsinline preload="metadata" height="100%"
+              loading="lazy">
               <source src="./static/videos/multi-view-lighting-harmonization.mp4" type="video/mp4">
             </video>
             <p>
@@ -748,22 +763,26 @@
         <div class="column is-four-fifths">
           <div id="results-carousel" class="carousel results-carousel">
             <div class="item">
-              <video poster="" id="3dgs-0" autoplay controls muted loop playsinline height="100%">
+              <video poster="" id="3dgs-0" autoplay controls muted loop playsinline preload="metadata" height="100%"
+                loading="lazy">
                 <source src="./static/videos/3dgs-relighting-00.mp4" type="video/mp4">
               </video>
             </div>
             <div class="item">
-              <video poster="" id="3dgs-1" autoplay controls muted loop playsinline height="100%">
+              <video poster="" id="3dgs-1" autoplay controls muted loop playsinline preload="metadata" height="100%"
+                loading="lazy">
                 <source src="./static/videos/3dgs-relighting-01.mp4" type="video/mp4">
               </video>
             </div>
             <div class="item">
-              <video poster="" id="3dgs-2" autoplay controls muted loop playsinline height="100%">
+              <video poster="" id="3dgs-2" autoplay controls muted loop playsinline preload="metadata" height="100%"
+                loading="lazy">
                 <source src="./static/videos/3dgs-relighting-02.mp4" type="video/mp4">
               </video>
             </div>
             <div class="item">
-              <video poster="" id="3dgs-3" autoplay controls muted loop playsinline height="100%">
+              <video poster="" id="3dgs-3" autoplay controls muted loop playsinline preload="metadata" height="100%"
+                loading="lazy">
                 <source src="./static/videos/3dgs-relighting-03.mp4" type="video/mp4">
               </video>
             </div>
@@ -804,7 +823,7 @@
             <div class="demo-view-panel">
               <div class="demo-panel-header">Input</div>
               <div class="demo-image-container">
-                <img id="demo-input-image" src="" alt="Input" />
+                <img id="demo-input-image" src="" alt="Input" loading="lazy" decoding="async" />
               </div>
             </div>
             <div class="demo-view-panel">
@@ -875,8 +894,8 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js" defer></script>
+  <script defer>
     document.addEventListener('DOMContentLoaded', function () {
       var carousel = bulmaCarousel.attach('#results-carousel', {
         slidesToScroll: 1,
@@ -895,7 +914,7 @@
       });
     });
   </script>
-  <script type="module" src="./static/demo/js/app.js"></script>
+  <script type="module" src="./static/demo/js/app.js" defer></script>
 
 </body>
 
